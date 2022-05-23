@@ -1,0 +1,13 @@
+version: '1'
+services:
+  pravaler_dev:
+    container_name: rijksmuseum
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+      args:
+        - img=node:16.14.0
+    ports:
+      - "3006:3000"
+    volumes:
+      - '.:/app'

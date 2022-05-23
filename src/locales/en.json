@@ -1,0 +1,14 @@
+{
+  "app.title": "Rijks Museum",
+  "title.searchBar": "Type search query term in here",
+  "title.result": "Results",
+  "btn.prev": "Prev page",
+  "btn.next": "Next page",
+  "btn.backPage": "Go to results page",
+  "btn.readFull": "Read the full article",
+  "placeholder.text": "type here ...",
+  "error.required": "* required field",
+  "error.notFound": "Collection Not Found",
+  "text.loading": "Loading...",
+  "text.resultNotFound": "No result found"
+}
