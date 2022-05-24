@@ -14,7 +14,8 @@ It should have:
 1. First, clone this repo:
 
 ```console
-$ git clone https://github.com/diegotauchert/
+$ git clone https://github.com/diegotauchert/rijksmuseumAPI.git
+
 ```
 
 ### `Docker`

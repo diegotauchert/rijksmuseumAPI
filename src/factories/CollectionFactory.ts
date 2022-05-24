@@ -4,18 +4,18 @@ import { CollectionInterface, CollectionApiResponse } from "../interfaces/Collec
 export default class CollectionFactory {
   
   static builder(payload:CollectionApiResponse[]): CollectionInterface[] {
-    const Collections: CollectionInterface[] = [];
+    const collections: CollectionInterface[] = [];
 
-    payload.map((Collection:CollectionApiResponse) => 
-      Collections.push({
-        id: Collection.id,
-        link: Collection.links.web,
-        title: Collection.title,
-        description: Collection.longTitle,
-        image: Collection?.webImage?.url,
+    payload.map((collection:CollectionApiResponse) => 
+      collections.push({
+        id: collection.id,
+        link: collection.links.web,
+        title: collection.title,
+        description: collection.longTitle,
+        image: collection?.webImage?.url,
       })
     );
 
-    return Collections;
+    return collections;
   }
 }

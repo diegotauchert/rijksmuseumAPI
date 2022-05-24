@@ -17,10 +17,12 @@ export default class CollectionService {
   private apiKey = process.env.REACT_APP_API_KEY;
 
   public async fetchCollections(offset: number, filter?: string): Promise<CollectionInterface[]> {
-    const format = `json`;
-    const sort = `achronologic`
+    const format: string = `json`;
+    const sort: string = `achronologic`
+    const hexadecimal: string = `000000`;
+    const encodeHash: string = encodeURIComponent('#')
 
-    let url = `${this.baseUrl}/collection?key=${this.apiKey}&ps=${Number(offset)}&s=${sort}&format=${format}`;
+    let url = `${this.baseUrl}/collection?key=${this.apiKey}&p=${Number(offset)}&ps=12&s=${sort}&format=${format}&f.normalized32Colors.hex=${encodeHash}${hexadecimal}`;
 
     if(filter){
       url += `&q=${filter}`;
@@ -29,11 +31,12 @@ export default class CollectionService {
     try {
       const response = await this.http.get(url);
       const payload = await response.json();
+
       const data = payload?.artObjects
 
-      return CollectionFactory.builder(data); 
+      return CollectionFactory.builder(data);
     }catch(error){
-      throw new Error('Something went wrong')
+      throw new Error(`Something went wrong: ${error}`);
     }
   }
 }

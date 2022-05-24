@@ -32,7 +32,7 @@ function SearchResult() {
         </StyledTitle>
         <div role="feed">
           {
-            collections && collections.length > 0 ? 
+            collections?.length > 0 ? 
               collections.map((item:CollectionInterface) => (
                 <SearchItem item={item} key={item.id} />
               )) 

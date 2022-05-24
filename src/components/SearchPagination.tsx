@@ -30,13 +30,21 @@ function SearchPagination() {
 
   return (
     <StyledDivButton>
-      <Link to={`/Collections/${Math.round(page-1) || 1}`}>
+      <Link to={`/collections/${Math.round(page-1) || 1}`}>
         <StyledButton type='button' onClick={handleClickPrev} disabled={page === 1}>
           &lsaquo; <FormattedMessage id="btn.prev" />
         </StyledButton>
       </Link>
+
+      {page > 1 &&
+        <Link to="/collections/1">
+          <StyledButton type='button' onClick={handleClickPrev} disabled={page === 1}>
+            <FormattedMessage id="btn.home" />
+          </StyledButton>
+        </Link>
+      }
       
-      <Link to={`/Collections/${page+1}`}>
+      <Link to={`/collections/${page+1}`}>
         <StyledButton type='button' onClick={handleClickNext}>
           <FormattedMessage id="btn.next" /> &rsaquo;
         </StyledButton>

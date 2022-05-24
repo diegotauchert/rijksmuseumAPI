@@ -8,6 +8,16 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  button{
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
   .skeleton{
     padding: 1.2rem;
     background-color: #F5F5F5;

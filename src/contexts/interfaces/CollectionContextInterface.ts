@@ -1,4 +1,3 @@
-import { RefObject } from 'react';
 import { CollectionInterface } from "../../interfaces/CollectionInterface";
 
 export interface CollectionContextInterface {
@@ -9,5 +8,4 @@ export interface CollectionContextInterface {
   handleClickPrev: () => void,
   handleClickNext: () => void,
   page: number,
-  divRef: RefObject<HTMLDivElement>,
 }
