@@ -15,15 +15,18 @@ export const handlers = [
         )
       }
       
-      if(req.url.searchParams.get('p') === '2') {
-        return res(
-          ctx.status(200),
-          ctx.json({
-            artObjects: articlesMock2
-          })
-        )
-      }
-      
+      return res(
+        ctx.status(200),
+        ctx.json({
+          artObjects: articlesMock2
+        })
+      )
+    }
+  ),
+
+  rest.get(
+    `https://www.rijksmuseum.nl/api/en/collection/DI-MP-1-3813A`, 
+    async (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({

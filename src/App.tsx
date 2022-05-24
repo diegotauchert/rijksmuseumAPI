@@ -11,7 +11,7 @@ function App(){
   return (
     <WrapperContent>
       <Header />
-      <Suspense fallback={<>...</>}>
+      <Suspense fallback={<>Loading Application ...</>}>
         <Routes>
           <Route path="/" element={<SearchContent />} />
           <Route path="/collections/:page" element={<SearchContent />} />

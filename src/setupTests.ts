@@ -3,8 +3,6 @@ import { server } from './mocks/server';
 
 beforeAll(() => {
   server.listen()
-
-  // jest.useFakeTimers();
 });
 
 afterEach(() => server.resetHandlers());

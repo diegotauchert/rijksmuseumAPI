@@ -1,3 +1,6 @@
 module.exports = {
-  testTimeout: 20000,
+  testTimeout: 50000,
+  setupFilesAfterEnv: [
+    "<rootDir>/src/setupTests.ts"
+  ]
 }

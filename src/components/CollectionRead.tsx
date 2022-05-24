@@ -71,8 +71,8 @@ function CollectionRead() {
   const [message, setMessage] = useState<string>('');
   const intl = useIntl();
 
-  const fetchSingleCollection = useCallback((collectionId: string) => {
-    CollectionServiceInstance.fetchSingleCollection(collectionId).then((res:CollectionInterface) => {
+  const fetchSingleCollection = useCallback(async (collectionId: string) => {
+    await CollectionServiceInstance.fetchSingleCollection(collectionId).then((res:CollectionInterface) => {
       setCollection(res)
     }).finally(() => setMessage(''))
   }, [])

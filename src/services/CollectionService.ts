@@ -37,7 +37,7 @@ export default class CollectionService {
       const payload = await response.json();
       const data = payload?.artObjects
 
-      return CollectionFactory.builder(data);
+      return CollectionFactory.builder(data || []);
     }catch(error){
       throw new Error(`Something went wrong: ${error}`);
     }
@@ -49,7 +49,6 @@ export default class CollectionService {
     try {
       const response = await this.http.get(url);
       const payload = await response.json();
-
       const data = payload?.artObject
 
       return CollectionFactory.builderSingle(data || {});

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { CollectionContext } from '../contexts/CollectionContext';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
 import SearchResult from './SearchResult';
@@ -12,8 +13,10 @@ const StyledSearchContent = styled.div`
 `;
 
 function SearchContent() {
+  const { divRef } = useContext(CollectionContext)
+
   return (
-    <StyledSearchContent>
+    <StyledSearchContent ref={divRef}>
       <SearchBar />
       <SearchResult />
       <SearchPagination />

@@ -5,6 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import {createMemoryHistory} from 'history'
 import App from '../App';
 
+window.HTMLElement.prototype.scrollIntoView = jest.fn()
+
 describe('Header', () => {
   it('Should render header', async () => {
     render(
@@ -20,17 +22,16 @@ describe('Header', () => {
   });
 });
 
-describe('Articles', () => {
-  it.only('Should render searchbar', async () => {
+describe('Collections', () => {
+  it('Should render searchbar', async () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
 
-    const title = screen.getByText(/type search query term in here:/i)
+    const title = screen.getByText(/type search query term in here/i);
     expect(title).toBeInTheDocument();
-    debug(undefined, 1000000)
 
     expect(screen.getByRole('img', {
       name: /search icon/i
@@ -39,21 +40,22 @@ describe('Articles', () => {
     expect(screen.getByPlaceholderText(/type here \.\.\./i)).toBeInTheDocument();
   });
 
-  it('Should render articles', async () => {
+  it('Should render collections', async () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    
+
     expect(screen.getByText(/results/i)).toBeInTheDocument();
 
     await waitFor(() => expect(screen.getByRole("progressbar")).toBeInTheDocument())
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))
     await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument())
+
+    await waitFor(() => expect(screen.getAllByRole('article').length).toEqual(10))
+    expect(screen.getByText('Testing API 1')).toBeInTheDocument()
     
-    expect(screen.getAllByRole('article').length).toEqual(10)
-    expect(screen.getByRole('link', { name: /Mock article 123/i })).toBeInTheDocument()
   });
 
   it('Should render prev and next button, and click next and prev page', async () => {
@@ -78,7 +80,7 @@ describe('Articles', () => {
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))
     await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument());
 
-    await waitFor(() => expect(screen.getByRole('link', { name: /Mock 2 article 123/i })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Testing API 10')).toBeInTheDocument())
 
     userEvent.click(prevButton);
 
@@ -86,10 +88,10 @@ describe('Articles', () => {
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))
     await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument());
 
-    expect(screen.getByRole('link', { name: /Mock article 123/i })).toBeInTheDocument()
+    expect(screen.getByText('Testing API 1')).toBeInTheDocument()
   });
 
-  it('Should render inner page of article and go back to results page', async () => {
+  it('Should render inner page of collection and go back to results page', async () => {
     const history = createMemoryHistory()
 
     render(
@@ -102,22 +104,22 @@ describe('Articles', () => {
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))
     await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument());
 
-    const article = screen.getByRole('link', { name: /Mock article 123/i });
+    const collection = screen.getByText('Testing API 1');
 
-    expect(article).toBeInTheDocument()
+    expect(collection).toBeInTheDocument()
 
-    userEvent.click(article);
+    userEvent.click(collection);
 
     await waitFor(() => expect(screen.getByText(/Loading.../i)).toBeInTheDocument());
     await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument());
 
     expect(screen.getByRole('button', { name: /‹ go to results page/i })).toBeInTheDocument()
 
-    await waitFor(() => expect(screen.getByRole('heading', { name: /Mock article 123 inner page mock/i })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('heading', { name: /Dirhem van de Ghaznaviden/i })).toBeInTheDocument())
 
     userEvent.click(screen.getByRole('button', { name: /‹ go to results page/i }))
 
-    await waitFor(() => expect(screen.getByRole('link', { name: /Mock article 123/i })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Testing API 1')).toBeInTheDocument())
   });
 
   it('Should filter typing in searchbar', async () => {
@@ -137,10 +139,10 @@ describe('Articles', () => {
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))
     await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument())
 
-    await waitFor(() => userEvent.type(inputSearch, 'mock'));
-    expect(inputSearch).toHaveValue('mock')
+    await waitFor(() => userEvent.type(inputSearch, 'Testing API'));
+    expect(inputSearch).toHaveValue('Testing API')
 
-    expect(screen.getAllByRole('article').length).toEqual(1)
+    expect(screen.getAllByRole('article').length).toEqual(10)
 
     inputSearch.setSelectionRange(0, inputSearch.value.length)
     await waitFor(() => userEvent.type(inputSearch, 'mocksss'));
@@ -150,10 +152,10 @@ describe('Articles', () => {
     expect(screen.getByText(/no result found/i)).toBeInTheDocument()
 
     inputSearch.setSelectionRange(0, inputSearch.value.length)
-    userEvent.type(inputSearch, 'mo')
-    expect(inputSearch).toHaveValue('mo')
+    userEvent.type(inputSearch, 'Testing API 1')
+    expect(inputSearch).toHaveValue('Testing API 1')
 
     await waitFor(() => expect(screen.queryByText(/no result found/i)).not.toBeInTheDocument())
-    expect(screen.queryAllByRole('article').length).toEqual(4)
+    expect(screen.queryAllByRole('article').length).toEqual(2)
   });
 });
