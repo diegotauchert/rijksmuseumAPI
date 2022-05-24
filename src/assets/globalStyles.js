@@ -8,10 +8,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   button{
     cursor: pointer;
     border: none;
@@ -31,12 +27,17 @@ const GlobalStyle = createGlobalStyle`
   .skeleton .rows{
     width: 95%;
     margin: 2px 0 0 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
   }
 
-  .skeleton .rows div{
+  .skeleton .rows .lines div, .skeleton .rows div.thumb{
     background-color: #666;
     width: 100%;
-    height: 10px;
+    height: 12px;
     border-radius:10px;
     opacity: 0.3;
     margin-bottom: 5px;
@@ -44,8 +45,17 @@ const GlobalStyle = createGlobalStyle`
     animation: shine 1s linear infinite alternate;
   }
 
-  .skeleton .rows div:last-child{
+  .skeleton .rows .lines div:last-child{
     width: 70%;
+  }
+
+  .skeleton .rows .lines{
+    width: 55%;
+  }
+
+  .skeleton .rows .thumb{
+    height: 310px !important;
+    width: 45% !important;
   }
 
   @keyframes shine {

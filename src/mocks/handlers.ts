@@ -4,26 +4,22 @@ import { articlesMock, articlesMock2, articleMockInner } from './articlesMock';
 
 export const handlers = [
   rest.get(
-    `https://www.rijksmuseum.nl/api/en?key=JElajnDl`, 
+    `https://www.rijksmuseum.nl/api/en/collection`, 
     async (req, res, ctx) => {
-      if(req.url.searchParams.get('page') === '1') {
+      if(req.url.searchParams.get('p') === '1') {
         return res(
           ctx.status(200),
           ctx.json({
-            response: {
-              docs: articlesMock
-            }
+            artObjects: articlesMock
           })
         )
       }
       
-      if(req.url.searchParams.get('page') === '2') {
+      if(req.url.searchParams.get('p') === '2') {
         return res(
           ctx.status(200),
           ctx.json({
-            response: {
-              docs: articlesMock2
-            }
+            artObjects: articlesMock2
           })
         )
       }
@@ -31,9 +27,7 @@ export const handlers = [
       return res(
         ctx.status(200),
         ctx.json({
-          response: {
-            docs: articleMockInner
-          }
+          artObject: articleMockInner
         })
       )
     }

@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FormattedMessage, useIntl } from 'react-intl';
-// import { decodePipe } from '../helpers/utils';
-// import CollectionService from '../services/CollectionService';
-// import { CollectionInterface } from '../interfaces/CollectionInterface';
+import CollectionService from '../services/CollectionService';
+import { CollectionInterface } from '../interfaces/CollectionInterface';
 
 const StyledSingleCollection = styled.div`
   padding: 1rem;
   margin: 4rem auto 0 auto;
   width: 70%;
   min-width: 75vmin;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const StyledButton = styled.button`
@@ -50,27 +54,37 @@ const StyledParagraph = styled.p`
   margin-bottom: 2rem;
 `;
 
+
+const StyledCoverImage = styled.img`
+  width: 100%;
+  height: 100%;
+  padding: .4rem;
+  border-radius: .25rem;
+  margin-bottom: 2rem;
+`;
+
 function CollectionRead() {
-  // const CollectionServiceInstance = new CollectionService();
+  const CollectionServiceInstance = new CollectionService();
   const { id } = useParams();
   const navigate = useNavigate();
-  // const [collection, setCollection] = useState<CollectionInterface>({} as CollectionInterface);
-  const collection:any = [];
+  const [collection, setCollection] = useState<CollectionInterface>({} as CollectionInterface);
   const [message, setMessage] = useState<string>('');
   const intl = useIntl();
 
-  // const fetchSingleCollection = useCallback(async (CollectionId: string) => {
-  //   await CollectionServiceInstance.getSingleCollection(CollectionId).then((res:CollectionInterface) => {
-  //     setCollection(res)
-  //   }).finally(() => setMessage(''))
-  // }, [])
+  const fetchSingleCollection = useCallback((collectionId: string) => {
+    CollectionServiceInstance.fetchSingleCollection(collectionId).then((res:CollectionInterface) => {
+      setCollection(res)
+    }).finally(() => setMessage(''))
+  }, [])
 
   useEffect(() => {
     if(id){
       setMessage(intl.formatMessage({ id: 'text.loading' }));
-      // fetchSingleCollection(decodePipe(id))
+      fetchSingleCollection(id)
     }
   }, [id])
+
+  const date = collection.date ? `Acquisition Date: ${collection.date.toLocaleString('en-GB', { timeZone: 'UTC' }).replace(`T`, ` `).replace(` 00:00:00`, ``)}` : ``;
 
   return (
     <StyledSingleCollection>
@@ -81,11 +95,16 @@ function CollectionRead() {
       {collection && collection.title ? 
       <>
         <StyledMainTitle>{collection.title}</StyledMainTitle>
-        <StyledDate>{collection.id}</StyledDate>
+        <StyledContainer>
+          <StyledDate>{collection.id}</StyledDate>
+          <StyledDate>{date}</StyledDate>
+        </StyledContainer>
         <StyledParagraph>{collection.description}</StyledParagraph>
+        { collection.hasImage && <StyledCoverImage src={collection.image} alt="Collection cover" height={200}  /> }
+
         <a href={collection.link} target='_blank' rel='noopener noreferrer'>
           <StyledButton type='button'>
-            <FormattedMessage id="btn.readFull" />
+            <FormattedMessage id="btn.seeCollection" />
           </StyledButton>
         </a>
       </>

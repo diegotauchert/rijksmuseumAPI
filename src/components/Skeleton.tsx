@@ -12,8 +12,12 @@ function Skeleton() {
         <div key={a} className="skeleton">
           <img src="/favicon.ico" alt="Collection icon" width={20} height={20} />
           <div className="rows">
-            <div>...</div>
-            <div>...</div>
+            <div className='thumb'>...</div>
+            <div className='lines'>
+              <div>...</div>
+              <div>...</div>
+              <div>...</div>
+            </div>
           </div>
         </div>
       ))}

@@ -9,7 +9,7 @@ type ILocaleProviderProps = {
 export default function LocaleProvider({ children }: ILocaleProviderProps) {
   return (
     <IntlProvider locale="en" messages={en}>
-      {children}
+      <div>{children}</div>
     </IntlProvider>
   );
 }

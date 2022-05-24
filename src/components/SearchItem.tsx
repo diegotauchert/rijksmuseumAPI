@@ -2,7 +2,7 @@ import React, { MouseEvent, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsZoomIn, BsZoomOut } from 'react-icons/bs';
-import { normalizeUrl, encodePipe } from '../helpers/utils';
+import { normalizeUrl } from '../helpers/utils';
 import { CollectionInterface } from '../interfaces/CollectionInterface';
 
 const StyledSearchItem = styled.article`
@@ -14,7 +14,7 @@ const StyledSearchItem = styled.article`
 
   &:hover:before {
     content: '';
-    animation: backgroundShow 1s linear 1 forwards;
+    animation: backgroundShow 1s linear 0s 1 forwards;
     position: absolute;
     inset: 0;
     background: url('/bg-rijksmuseum.jpg') no-repeat top left;
@@ -48,6 +48,18 @@ const StyledContainerIcon = styled.div`
 const StyledTitle = styled.h2`
   font-size: 1rem;
   margin-bottom: .75rem;
+`;
+
+const StyledCount = styled.span`
+  font-size: .75rem;
+  font-weight: 500;
+  color: #FFF;
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  background-color: #888;
+  padding: 0.3rem 0.5rem;
+  border-radius: 50%;
 `;
 
 const StyledCoverImageContainer = styled.div`
@@ -94,10 +106,11 @@ const StyledCoverImage = styled.img`
 `;
 
 type ISearchItemProps = {
-  item: CollectionInterface
+  item: CollectionInterface;
+  number: number
 }
 
-function SearchItem({item}: ISearchItemProps) {
+function SearchItem({item, number}: ISearchItemProps) {
   const [zoom, setZoom] = useState<boolean>(false);
   const btnZoom = useRef<HTMLButtonElement>(null)
 
@@ -107,6 +120,9 @@ function SearchItem({item}: ISearchItemProps) {
   }
 
   const handleHover = (e: MouseEvent) => {
+    if(!item.hasImage){
+      return
+    }
     e.preventDefault()
 
     if(btnZoom?.current){
@@ -116,6 +132,9 @@ function SearchItem({item}: ISearchItemProps) {
 
 
   const handleLeave = (e: MouseEvent) => {
+    if(!item.hasImage){
+      return
+    }
     e.preventDefault()
 
     if(btnZoom?.current){
@@ -123,9 +142,11 @@ function SearchItem({item}: ISearchItemProps) {
     }
   }
 
+  const imageURL = item.hasImage ? item.image : `/no-image.png`;
+
   return (
     <Link 
-      to={`/collection/${normalizeUrl(item.title)}/${encodePipe(item.id)}`} 
+      to={`/collection/${normalizeUrl(item.title)}/${item.id}`} 
       style={{textDecoration: 'none'}} 
       id={`search-item-${item.id}`}
     >
@@ -136,11 +157,12 @@ function SearchItem({item}: ISearchItemProps) {
           </StyledContainerIcon>
 
           <StyledCoverImageContainer onMouseOver={handleHover} onMouseLeave={handleLeave}>
-            <StyledButton type="button" ref={btnZoom} onClick={handleZoom}>{zoom ? <BsZoomIn /> : <BsZoomOut />} Zoom {zoom ? 'In' : 'Out'}</StyledButton>
-            <StyledCoverImage src={item.image} alt="Collection cover" height={200} style={zoom ? {objectFit: 'contain'} : {objectFit: 'cover'}} />
+            { item.hasImage && <StyledButton type="button" ref={btnZoom} onClick={handleZoom}>{zoom ? <BsZoomIn /> : <BsZoomOut />} Zoom {zoom ? 'In' : 'Out'}</StyledButton> }
+            <StyledCoverImage src={imageURL} alt="Collection cover" height={200} style={zoom ? {objectFit: 'contain'} : {objectFit: 'cover'}} />
           </StyledCoverImageContainer>
 
           <div>
+            <StyledCount>{number}</StyledCount>
             <StyledTitle>{item.title}</StyledTitle>
             <p>{item.description}</p>
           </div>

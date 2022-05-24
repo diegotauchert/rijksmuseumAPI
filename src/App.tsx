@@ -15,7 +15,7 @@ function App(){
         <Routes>
           <Route path="/" element={<SearchContent />} />
           <Route path="/collections/:page" element={<SearchContent />} />
-          <Route path="/collections/:title/:id" element={<CollectionRead />} />
+          <Route path="/collection/:title/:id" element={<CollectionRead />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

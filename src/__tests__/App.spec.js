@@ -21,15 +21,16 @@ describe('Header', () => {
 });
 
 describe('Articles', () => {
-  it('Should render searchbar', async () => {
+  it.only('Should render searchbar', async () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    
+
     const title = screen.getByText(/type search query term in here:/i)
     expect(title).toBeInTheDocument();
+    debug(undefined, 1000000)
 
     expect(screen.getByRole('img', {
       name: /search icon/i
@@ -45,7 +46,7 @@ describe('Articles', () => {
       </BrowserRouter>
     );
     
-    expect(screen.getByText(/results:/i)).toBeInTheDocument();
+    expect(screen.getByText(/results/i)).toBeInTheDocument();
 
     await waitFor(() => expect(screen.getByRole("progressbar")).toBeInTheDocument())
     await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"))

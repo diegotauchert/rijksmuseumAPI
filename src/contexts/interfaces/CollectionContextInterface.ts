@@ -5,6 +5,7 @@ export interface CollectionContextInterface {
   search: Function,
   searchApi: Function,
   message: string,
+  filterMessage: string,
   handleClickPrev: () => void,
   handleClickNext: () => void,
   page: number,

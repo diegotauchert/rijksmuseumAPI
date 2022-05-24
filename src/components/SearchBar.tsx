@@ -3,9 +3,21 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { CollectionContext } from '../contexts/CollectionContext';
 import searchIcon from '../assets/search.svg';
+import Colors from './Colors';
+import { FilterTypeEnum } from '../enum/FilterTypeEnum';
 
 const StyledSearchBar = styled.div`
   margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+`;
+
+const StyledContainerSearchBar = styled.div`
+  width: 70%;
+`;
+
+const StyledContainerColors = styled.div`
+  width: 30%;
 `;
 
 const StyledTitle = styled.label`
@@ -20,7 +32,7 @@ const StyledInput = styled.input`
   font-weight: 700;
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 1.7rem;
   border: 1px solid #ccc;
   background-color: #FFFDF4;
   color: #333;
@@ -41,8 +53,8 @@ const StyledButton = styled.button`
   position: absolute;
   border: none;
   background-color: transparent;
-  right: 1rem;
-  top: 1rem;
+  right: 1.7rem;
+  top: 1.7rem;
   cursor: pointer;
   z-index: 1;
   opacity: 0.5;
@@ -73,7 +85,7 @@ const searchBar = () => {
 
   const handleClick = () => {
     if (inputRef.current!.value) {
-      searchApi(inputRef.current!.value);
+      searchApi(inputRef.current!.value, FilterTypeEnum.TEXT);
     }else{
       setWarning(true)
       inputRef.current!.focus()
@@ -82,7 +94,7 @@ const searchBar = () => {
 
   return (
     <StyledSearchBar>
-      <div>
+      <StyledContainerSearchBar>
         <StyledTitle htmlFor='search-input'>
           <FormattedMessage id="title.searchBar" />:
         </StyledTitle>
@@ -104,7 +116,11 @@ const searchBar = () => {
           </StyledButton>
         </StyledFormField>
         {warning && <StyledError><FormattedMessage id="error.required" /></StyledError>}
-      </div>
+      </StyledContainerSearchBar>
+
+      <StyledContainerColors>
+        <Colors />
+      </StyledContainerColors>
     </StyledSearchBar>
   )
 }

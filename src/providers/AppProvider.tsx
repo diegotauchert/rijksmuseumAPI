@@ -1,33 +1,43 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { ReactNode, useEffect, useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom'
 import CollectionService from '../services/CollectionService';
 import { CollectionInterface } from '../interfaces/CollectionInterface';
 import { CollectionContext } from '../contexts/CollectionContext';
+import { FilterTypeEnum } from '../enum/FilterTypeEnum';
 
 type IAppProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const PAGE_DEFAULT = 1;
+const PAGE_DEFAULT: number = 1;
+const FILTER_DEFAULT: string = '';
+const FILTER_TYPE: FilterTypeEnum = 0;
 
 export default function AppProvider({ children }: IAppProviderProps) {
   const CollectionServiceInstance = new CollectionService();
   const [collectionsFetch, setCollectionsFetch] = useState<CollectionInterface[]>([] as CollectionInterface[]);
   const [collections, setCollections] = useState<CollectionInterface[]>([] as CollectionInterface[]);
   const [message, setMessage] = useState<string>('' as string);
+  const [filterMessage, setFilterMessage] = useState<string>('' as string);
   const [page, setPage] = useState<number>(PAGE_DEFAULT);
   const intl = useIntl();
+  const navigate = useNavigate();
 
-  const fetchData = useCallback((offset: number, filter?:string) => {
-    CollectionServiceInstance.fetchCollections(offset, filter).then((res:CollectionInterface[]) => {
+  const fetchData = useCallback((offset: number, filter?: string, filterType?: FilterTypeEnum) => {
+    CollectionServiceInstance.fetchCollections(offset, filter, filterType).then((res:CollectionInterface[]) => {
       setCollectionsFetch(res)
       setCollections(res)
-    }).finally(() => setMessage(''))
+    }).finally(() => {
+      setMessage(``)
+      setFilterMessage(`${filter}`)
+    })
   }, [])
 
   useEffect(() => {
     setMessage(intl.formatMessage({ id: 'text.loading' }));
-    fetchData(page, '')
+    
+    fetchData(page, FILTER_DEFAULT, FILTER_TYPE)
 
     return () => {
       setCollectionsFetch([] as CollectionInterface[]);
@@ -50,15 +60,16 @@ export default function AppProvider({ children }: IAppProviderProps) {
     }
   }
 
-  const searchApi = (filter: string) => {
-    fetchData(page, filter)
+  const searchApi = (filter: string, filterType: FilterTypeEnum) => {
+    fetchData(PAGE_DEFAULT, filter, filterType)
+    setPage(PAGE_DEFAULT)
+    navigate('/');
   }
 
   const scrollToTop = () => {
     try{
       window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+        top: 0
       });
     }catch(error){
       throw new Error(`Error on scroll to top: ${error}`)
@@ -77,7 +88,7 @@ export default function AppProvider({ children }: IAppProviderProps) {
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <CollectionContext.Provider value={{ collections, search, searchApi, message, handleClickPrev, handleClickNext, page }}>
+    <CollectionContext.Provider value={{ collections, search, searchApi, message, filterMessage, handleClickPrev, handleClickNext, page }}>
       {children}
     </CollectionContext.Provider>
   );

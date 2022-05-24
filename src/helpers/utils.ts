@@ -1,11 +1,7 @@
 export function normalizeUrl(url:string) {
-    return url.replaceAll(/\s/g, '-').replaceAll(',', '-').replaceAll('.', '').replaceAll(/[’"]+/g, '').toLowerCase();
+    return url.replaceAll('-', '').replace(/[^\w\s]/gi, '').replaceAll(/\s/g, '-').replaceAll(',', '-').replaceAll('.', '').replaceAll(/[’"]+/g, '').toLowerCase();
 }
 
-export function encodePipe(url:string) {
-    return url.replaceAll('/', '|');
-}
-
-export function decodePipe(url:string) {
-    return url.replaceAll('|', '/');
+export function isHexadecimal(str:string) {
+    return /^[0-9a-fA-F]+$/.test(str);
 }
