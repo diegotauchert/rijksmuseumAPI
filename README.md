@@ -24,6 +24,8 @@ run `make deploy_dev` to deploy the app to a local Docker container.
 
 then, run `make start` to run the app in the container.
 
+Open [http://127.0.0.1:3006](http://127.0.0.1:3006) to view it in your browser.
+
 ### `Node`
 
 ### ` Tested only on node.js v16.14.0 `

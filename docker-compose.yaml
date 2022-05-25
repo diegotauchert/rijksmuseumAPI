@@ -1,6 +1,6 @@
 version: '1'
 services:
-  pravaler_dev:
+  tauchert_dev:
     container_name: rijksmuseum
     build:
       context: .
